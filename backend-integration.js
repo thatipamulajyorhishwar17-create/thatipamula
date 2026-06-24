@@ -33,7 +33,6 @@ window.initLogin = async function() {
     const form = document.getElementById('loginForm');
     if (!form) return;
 
-    // Set demo credentials message
     const demoMsg = document.getElementById('demoMsg');
     if (demoMsg) {
         demoMsg.textContent = 'Demo: Admin (ID: admin, Password: admin123) | Employee (use any EMP ID, Password: emp@XXX)';
@@ -44,7 +43,6 @@ window.initLogin = async function() {
     form.parentNode.replaceChild(newForm, form);
 
     const tryLocalFallback = function(empId, password, role, btn) {
-        // Built-in admin credential check for offline mode
         if (role === 'admin') {
             if ((empId === 'admin' || empId === 'admin@company.com') && password === 'admin123') {
                 showNotification('Login successful! Welcome Admin', 'success');
@@ -53,7 +51,6 @@ window.initLogin = async function() {
                 return true;
             }
         } else {
-            // Employee fallback
             if (typeof CompanyData !== 'undefined' && CompanyData.employees) {
                 const employee = CompanyData.employees.find(e => e.id === empId || e.email === empId);
                 if (employee && password === employee.password) {
@@ -86,16 +83,13 @@ window.initLogin = async function() {
             setToken(result.token);
             setStoredUser(result.user);
             localStorage.setItem('loggedInUser', JSON.stringify(result.user));
-
-            showNotification(result.message, 'success');
-
+            showNotification(result.message || 'Login successful', 'success');
             if (result.user.role === 'employee' && result.user.isFirstLogin) {
                 setTimeout(() => { window.location.href = 'employee-details.html'; }, 800);
             } else {
                 setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
             }
         } catch (err) {
-            // If API is unreachable, try local credential fallback
             const isServerError = err.message && (err.message.includes('Cannot connect to server') || err.message.includes('Failed to fetch'));
             if (isServerError) {
                 console.warn('Backend server unavailable. Trying local fallback...');

@@ -27,49 +27,81 @@ const EMPLOYEES = [
 ];
 
 router.get('/login', (req, res) => {
-    res.json({ method: 'GET', message: 'Use POST to login' });
+    res.json({ success: false, method: 'GET', message: 'Use POST to login' });
 });
 
 router.post('/login', async (req, res) => {
+    const requestId = Date.now();
     try {
         const { id, password, role } = req.body;
+        console.log(`[${requestId}] Login request received: id=${id}, role=${role}`);
+
         if (!id || !password || !role) {
-            return res.status(400).json({ message: 'Please provide ID, password, and role' });
+            console.log(`[${requestId}] Missing fields: id=${!!id}, password=${!!password}, role=${!!role}`);
+            return res.status(400).json({ success: false, message: 'Please provide ID, password, and role' });
         }
+
         if (role === 'admin') {
             const user = findUser(id);
             if (!user) {
-                return res.status(401).json({ message: 'Invalid admin credentials' });
+                console.log(`[${requestId}] Admin not found: ${id}`);
+                return res.status(401).json({ success: false, message: 'Invalid email or password' });
             }
+            console.log(`[${requestId}] Admin found: ${user.id}`);
+
             const validPassword = await bcrypt.compare(password, user.password);
+            console.log(`[${requestId}] Password match: ${validPassword}`);
+
             if (!validPassword) {
-                return res.status(401).json({ message: 'Invalid admin credentials' });
+                return res.status(401).json({ success: false, message: 'Invalid email or password' });
             }
-            const token = generateToken({ id: user.id, name: user.name, role: 'admin' });
-            return res.json({
-                message: 'Login successful! Welcome Admin',
+
+            const tokenPayload = { id: user.id, name: user.name, role: 'admin' };
+            const token = generateToken(tokenPayload);
+            console.log(`[${requestId}] JWT generated for admin ${user.id}`);
+
+            const response = {
+                success: true,
+                message: 'Login successful',
                 token,
-                user: { id: user.id, name: user.name, role: 'admin' }
-            });
+                user: { id: user.id, name: user.name, email: user.email, role: 'admin' }
+            };
+            console.log(`[${requestId}] Sending success response`);
+            return res.status(200).json(response);
         } else if (role === 'employee') {
             const emp = EMPLOYEES.find(e => e.id === id || e.email === id);
             if (!emp) {
-                return res.status(401).json({ message: 'Employee not found! Please check your ID or email' });
+                console.log(`[${requestId}] Employee not found: ${id}`);
+                return res.status(401).json({ success: false, message: 'Invalid email or password' });
             }
+            console.log(`[${requestId}] Employee found: ${emp.id}`);
+
             if (password !== emp.password) {
-                return res.status(401).json({ message: 'Invalid password for ' + emp.id + '. Use your employee password' });
+                console.log(`[${requestId}] Employee password mismatch`);
+                return res.status(401).json({ success: false, message: 'Invalid email or password' });
             }
-            const token = generateToken({ id: emp.id, name: emp.name, role: 'employee', department: emp.department });
-            return res.json({
-                message: 'Login successful! Welcome ' + emp.name,
+
+            const tokenPayload = { id: emp.id, name: emp.name, role: 'employee', department: emp.department };
+            const token = generateToken(tokenPayload);
+            console.log(`[${requestId}] JWT generated for employee ${emp.id}`);
+
+            const response = {
+                success: true,
+                message: 'Login successful',
                 token,
-                user: { id: emp.id, name: emp.name, role: 'employee', department: emp.department }
-            });
+                user: { id: emp.id, name: emp.name, email: emp.email, role: 'employee', department: emp.department }
+            };
+            console.log(`[${requestId}] Sending success response`);
+            return res.status(200).json(response);
         } else {
-            return res.status(400).json({ message: 'Invalid role specified' });
+            console.log(`[${requestId}] Invalid role: ${role}`);
+            return res.status(400).json({ success: false, message: 'Invalid role specified' });
         }
     } catch (err) {
-        return res.status(500).json({ message: 'Server error during login' });
+        console.error(`[${requestId}] Login error:`, err);
+        if (!res.headersSent) {
+            return res.status(500).json({ success: false, message: 'An unexpected error occurred. Please try again.' });
+        }
     }
 });
 
@@ -77,66 +109,69 @@ router.post('/forgot-password', async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
-            return res.status(400).json({ message: 'Please provide your Employee ID or Email' });
+            return res.status(400).json({ success: false, message: 'Please provide your Employee ID or Email' });
         }
         const user = findUser(email);
         const emp = EMPLOYEES.find(e => e.id === email || e.email === email);
         if (!user && !emp) {
-            return res.status(404).json({ message: 'Account not found with this ID/Email' });
+            return res.status(404).json({ success: false, message: 'Account not found with this ID/Email' });
         }
         const targetEmail = user ? user.email : emp.email;
         const otp = String(Math.floor(100000 + Math.random() * 900000));
         otpStore[targetEmail] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 };
         return res.json({
+            success: true,
             message: 'Verification code sent',
             otp: otp,
             email: targetEmail
         });
     } catch (err) {
-        return res.status(500).json({ message: 'Server error' });
+        console.error('Forgot password error:', err);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
 router.post('/verify-otp', (req, res) => {
     const { email, otp } = req.body;
     if (!email || !otp) {
-        return res.status(400).json({ message: 'Please provide email and OTP' });
+        return res.status(400).json({ success: false, message: 'Please provide email and OTP' });
     }
     const stored = otpStore[email];
     if (!stored) {
-        return res.status(400).json({ message: 'No verification code sent to this email' });
+        return res.status(400).json({ success: false, message: 'No verification code sent to this email' });
     }
     if (Date.now() > stored.expiresAt) {
         delete otpStore[email];
-        return res.status(400).json({ message: 'Verification code has expired' });
+        return res.status(400).json({ success: false, message: 'Verification code has expired' });
     }
     if (stored.otp !== otp) {
-        return res.status(400).json({ message: 'Invalid verification code' });
+        return res.status(400).json({ success: false, message: 'Invalid verification code' });
     }
     delete otpStore[email];
-    return res.json({ message: 'OTP verified successfully' });
+    return res.json({ success: true, message: 'OTP verified successfully' });
 });
 
 router.post('/reset-password', async (req, res) => {
     try {
         const { email, newPassword } = req.body;
         if (!email || !newPassword) {
-            return res.status(400).json({ message: 'Please provide email and new password' });
+            return res.status(400).json({ success: false, message: 'Please provide email and new password' });
         }
         if (newPassword.length < 4) {
-            return res.status(400).json({ message: 'Password must be at least 4 characters' });
+            return res.status(400).json({ success: false, message: 'Password must be at least 4 characters' });
         }
         const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
         const userIndex = users.findIndex(u => u.email === email);
         if (userIndex === -1) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         users[userIndex].password = hashedPassword;
         fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-        return res.json({ message: 'Password reset successful' });
+        return res.json({ success: true, message: 'Password reset successful' });
     } catch (err) {
-        return res.status(500).json({ message: 'Server error' });
+        console.error('Reset password error:', err);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
@@ -144,26 +179,27 @@ router.post('/change-password', async (req, res) => {
     try {
         const { currentPassword, newPassword } = req.body;
         if (!currentPassword || !newPassword) {
-            return res.status(400).json({ message: 'Please provide current and new password' });
+            return res.status(400).json({ success: false, message: 'Please provide current and new password' });
         }
         if (newPassword.length < 4) {
-            return res.status(400).json({ message: 'Password must be at least 4 characters' });
+            return res.status(400).json({ success: false, message: 'Password must be at least 4 characters' });
         }
         const user = findUser(req.user?.id);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const validPassword = await bcrypt.compare(currentPassword, user.password);
         if (!validPassword) {
-            return res.status(401).json({ message: 'Current password is incorrect' });
+            return res.status(401).json({ success: false, message: 'Current password is incorrect' });
         }
         const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
         const userIndex = users.findIndex(u => u.id === user.id);
         users[userIndex].password = await bcrypt.hash(newPassword, 10);
         fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-        return res.json({ message: 'Password updated successfully!' });
+        return res.json({ success: true, message: 'Password updated successfully!' });
     } catch (err) {
-        return res.status(500).json({ message: 'Server error' });
+        console.error('Change password error:', err);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
@@ -171,24 +207,25 @@ router.post('/first-time-setup', async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
         if (!email || !otp || !newPassword) {
-            return res.status(400).json({ message: 'Please provide email, OTP, and new password' });
+            return res.status(400).json({ success: false, message: 'Please provide email, OTP, and new password' });
         }
         const stored = otpStore[email];
         if (!stored || stored.otp !== otp) {
-            return res.status(400).json({ message: 'Invalid verification code' });
+            return res.status(400).json({ success: false, message: 'Invalid verification code' });
         }
         if (newPassword.length < 4) {
-            return res.status(400).json({ message: 'Password must be at least 4 characters' });
+            return res.status(400).json({ success: false, message: 'Password must be at least 4 characters' });
         }
         const emp = EMPLOYEES.find(e => e.id === email || e.email === email);
         if (!emp) {
-            return res.status(404).json({ message: 'Employee not found' });
+            return res.status(404).json({ success: false, message: 'Employee not found' });
         }
         emp.password = newPassword;
         delete otpStore[email];
-        return res.json({ message: 'Password set successfully!' });
+        return res.json({ success: true, message: 'Password set successfully!' });
     } catch (err) {
-        return res.status(500).json({ message: 'Server error' });
+        console.error('First time setup error:', err);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 

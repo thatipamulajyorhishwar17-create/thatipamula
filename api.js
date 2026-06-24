@@ -1,6 +1,5 @@
 // API Configuration
 const API_BASE_URL = window.location.origin + '/api';
-// const API_BASE_URL = 'http://localhost:5000/api'; // Uncomment for development
 
 // Token Management
 const TOKEN_KEY = 'ps_token';
@@ -54,11 +53,19 @@ async function apiRequest(endpoint, options = {}) {
 
     try {
         const response = await fetch(API_BASE_URL + endpoint, config);
-        let data, responseText;
+        let data;
+        let responseText;
+
         try {
             responseText = await response.text();
+            if (!responseText || responseText.trim().length === 0) {
+                throw new Error('empty_body');
+            }
             data = JSON.parse(responseText);
         } catch (jsonErr) {
+            if (jsonErr.message === 'empty_body') {
+                throw new Error('Server returned empty response (status ' + response.status + ') for ' + endpoint + '. The server may have crashed or the route may not exist.');
+            }
             throw new Error('Server returned: ' + (responseText || '(empty)') + ' (status ' + response.status + ') for ' + endpoint);
         }
 

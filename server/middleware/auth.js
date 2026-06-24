@@ -8,7 +8,8 @@ const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json');
 function getUsers() {
     try {
         if (fs.existsSync(USERS_FILE)) {
-            return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+            const data = fs.readFileSync(USERS_FILE, 'utf8');
+            return JSON.parse(data);
         }
     } catch (e) {
         console.error('Error reading users file:', e.message);
@@ -17,7 +18,9 @@ function getUsers() {
 }
 
 function findUser(id) {
-    return getUsers().find(u => u.id === id || u.email === id);
+    const users = getUsers();
+    const user = users.find(u => u.id === id || u.email === id);
+    return user || null;
 }
 
 function authenticateToken(req, res, next) {
@@ -25,12 +28,13 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'Access token required' });
+        return res.status(401).json({ success: false, message: 'Access token required' });
     }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Invalid or expired token' });
+            console.error('Token verification failed:', err.message);
+            return res.status(403).json({ success: false, message: 'Invalid or expired token' });
         }
         req.user = user;
         next();
