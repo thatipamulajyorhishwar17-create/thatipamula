@@ -43,6 +43,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, '..')));
 
 // API Routes
+const authRoutes = require('./routes/auth');
 const employeeRoutes = require('./routes/employees');
 const attendanceRoutes = require('./routes/attendance');
 const projectRoutes = require('./routes/projects');
@@ -50,13 +51,7 @@ const reportRoutes = require('./routes/reports');
 const dashboardRoutes = require('./routes/dashboard');
 const notificationRoutes = require('./routes/notifications');
 
-// DEBUG: Direct route handler (bypasses auth.js Router)
-app.post('/api/auth/login', (req, res) => {
-    console.log('Direct /api/auth/login handler called');
-    console.log('Body:', JSON.stringify(req.body));
-    res.json({ message: 'Direct handler OK', body: req.body });
-});
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/projects', projectRoutes);
@@ -67,11 +62,6 @@ app.use('/api/notifications', notificationRoutes);
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-// Debug endpoint to test POST
-app.post('/api/ping', (req, res) => {
-    res.json({ pong: true, body: req.body });
 });
 
 // SPA fallback - serve index.html for all non-file, non-api routes
