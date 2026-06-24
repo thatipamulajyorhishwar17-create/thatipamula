@@ -33,6 +33,8 @@ router.post('/login', async (req, res) => {
     try {
         const { id, password, role } = req.body;
 
+        console.log('Login attempt:', { id: id ? id.substring(0, 20) : '(empty)', role, bodyKeys: Object.keys(req.body) });
+
         if (!id || !password || !role) {
             return res.status(400).json({ message: 'Please provide ID, password, and role' });
         }
@@ -40,15 +42,18 @@ router.post('/login', async (req, res) => {
         if (role === 'admin') {
             const user = findUser(id);
             if (!user) {
+                console.log('Login: admin not found for', id);
                 return res.status(401).json({ message: 'Invalid admin credentials' });
             }
 
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
+                console.log('Login: wrong password for', id);
                 return res.status(401).json({ message: 'Invalid admin credentials' });
             }
 
             const token = generateToken({ id: user.id, name: user.name, role: 'admin' });
+            console.log('Login: success for', id);
             return res.json({
                 message: 'Login successful! Welcome Admin',
                 token,
