@@ -12,14 +12,6 @@ const adminUsers = [
         password: 'admin123',
         role: 'admin',
         created_at: new Date().toISOString()
-    },
-    {
-        id: 'thatipamulajyothishwargoud@gmail.com',
-        name: 'Jyothishwar Goud Thatipamula',
-        email: 'thatipamulajyothishwargoud@gmail.com',
-        password: 'Bhanu@9002',
-        role: 'admin',
-        created_at: new Date().toISOString()
     }
 ];
 

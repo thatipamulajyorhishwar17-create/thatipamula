@@ -196,7 +196,7 @@ function initLogin() {
     const form = document.getElementById('loginForm');
     const demoMsg = document.getElementById('demoMsg');
     if (demoMsg) {
-        demoMsg.textContent = 'Demo: Admin (ID: admin, Password: admin123) | New Admin: thatipamulajyothishwargoud@gmail.com / Bhanu@9002 | Employee (use any EMP ID, Password: emp@XXX)';
+        demoMsg.textContent = 'Demo: Admin (ID: admin, Password: admin123) | Employee (use any EMP ID, Password: emp@XXX)';
     }
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -217,13 +217,9 @@ function initLogin() {
             const employee = CompanyData.employees.find(e => e.id === empId || e.email === empId);
 
             if (role === 'admin') {
-                const isOldAdmin = (empId === 'admin' || empId === 'admin@company.com') && password === 'admin123';
-                const isNewAdmin = (empId === 'thatipamulajyothishwargoud@gmail.com' || empId === 'thatipamulajyothishwargoud') && password === 'Bhanu@9002';
-                if (isOldAdmin || isNewAdmin) {
-                    const adminId = isNewAdmin ? 'thatipamulajyothishwargoud@gmail.com' : 'admin';
-                    const adminName = isNewAdmin ? 'Jyothishwar Goud Thatipamula' : 'Admin';
-                    showNotification('Login successful! Welcome ' + adminName, 'success');
-                    localStorage.setItem('loggedInUser', JSON.stringify({ id: adminId, name: adminName, role: 'admin' }));
+                if ((empId === 'admin' || empId === 'admin@company.com') && password === 'admin123') {
+                    showNotification('Login successful! Welcome Admin', 'success');
+                    localStorage.setItem('loggedInUser', JSON.stringify({ id: 'admin', name: 'Admin', role: 'admin' }));
                     setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
                 } else {
                     showNotification('Invalid admin credentials!', 'error');

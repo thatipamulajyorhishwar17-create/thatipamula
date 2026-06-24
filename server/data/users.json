@@ -6,13 +6,5 @@
     "password": "$2a$10$05mJ/jzBNOM/RNAjnD83D.nFloeWtraOLI33kfOxUXd/9PCsHaUw6",
     "role": "admin",
     "created_at": "2026-06-24T02:06:13.146Z"
-  },
-  {
-    "id": "thatipamulajyothishwargoud@gmail.com",
-    "name": "Jyothishwar Goud Thatipamula",
-    "email": "thatipamulajyothishwargoud@gmail.com",
-    "password": "$2a$10$sdPTuSGjITURgZO6OIiNRu/oanc0mryZC2OjtGI4BR3e1f/dujpG6",
-    "role": "admin",
-    "created_at": "2026-06-24T02:06:13.146Z"
   }
 ]
