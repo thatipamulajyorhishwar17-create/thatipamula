@@ -59,11 +59,6 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Test endpoint (works with any method)
-app.all('/api/test', (req, res) => {
-    res.json({ method: req.method, working: true, body: req.body || {} });
-});
-
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

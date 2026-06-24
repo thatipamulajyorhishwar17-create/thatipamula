@@ -30,9 +30,47 @@ router.get('/login', (req, res) => {
     res.json({ method: 'GET', message: 'Use POST to login' });
 });
 
-router.post('/login', (req, res) => {
-    console.log('POST login called, body keys:', Object.keys(req.body));
-    res.json({ success: true, body: req.body });
+router.post('/login', async (req, res) => {
+    try {
+        const { id, password, role } = req.body;
+        if (!id || !password || !role) {
+            return res.status(400).json({ message: 'Please provide ID, password, and role' });
+        }
+        if (role === 'admin') {
+            const user = findUser(id);
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid admin credentials' });
+            }
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) {
+                return res.status(401).json({ message: 'Invalid admin credentials' });
+            }
+            const token = generateToken({ id: user.id, name: user.name, role: 'admin' });
+            return res.json({
+                message: 'Login successful! Welcome Admin',
+                token,
+                user: { id: user.id, name: user.name, role: 'admin' }
+            });
+        } else if (role === 'employee') {
+            const emp = EMPLOYEES.find(e => e.id === id || e.email === id);
+            if (!emp) {
+                return res.status(401).json({ message: 'Employee not found! Please check your ID or email' });
+            }
+            if (password !== emp.password) {
+                return res.status(401).json({ message: 'Invalid password for ' + emp.id + '. Use your employee password' });
+            }
+            const token = generateToken({ id: emp.id, name: emp.name, role: 'employee', department: emp.department });
+            return res.json({
+                message: 'Login successful! Welcome ' + emp.name,
+                token,
+                user: { id: emp.id, name: emp.name, role: 'employee', department: emp.department }
+            });
+        } else {
+            return res.status(400).json({ message: 'Invalid role specified' });
+        }
+    } catch (err) {
+        return res.status(500).json({ message: 'Server error during login' });
+    }
 });
 
 router.post('/forgot-password', async (req, res) => {
