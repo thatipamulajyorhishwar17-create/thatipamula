@@ -16,8 +16,7 @@ async function autoSeed() {
         try {
             const bcrypt = require('bcryptjs');
             const adminUsers = [
-                { id: 'admin', name: 'Admin', email: 'admin@company.com', password: 'admin123', role: 'admin', created_at: new Date().toISOString() },
-                { id: 'thatipamulajyothishwargoud@gmail.com', name: 'Jyothishwar Goud Thatipamula', email: 'thatipamulajyothishwargoud@gmail.com', password: 'Bhanu@9002', role: 'admin', created_at: new Date().toISOString() }
+                { id: 'admin', name: 'Admin', email: 'admin@company.com', password: 'admin123', role: 'admin', created_at: new Date().toISOString() }
             ];
             const seededUsers = [];
             for (const user of adminUsers) {
@@ -84,9 +83,8 @@ app.listen(PORT, () => {
     console.log(`  URL:        http://0.0.0.0:${PORT}`);
     console.log(`  API:        http://0.0.0.0:${PORT}/api`);
     console.log(`  Frontend:   http://0.0.0.0:${PORT}/login.html`);
-    console.log(`  \n  Admin Logins:`);
-    console.log(`    - admin / admin123 (legacy)`);
-    console.log(`    - thatipamulajyothishwargoud@gmail.com / Bhanu@9002 (new)`);
+    console.log(`  \n  Admin Login:`);
+    console.log(`    - admin / admin123`);
     console.log(`  ================================\n`);
 });
 
