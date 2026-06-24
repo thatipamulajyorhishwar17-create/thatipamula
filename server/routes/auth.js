@@ -26,6 +26,10 @@ const EMPLOYEES = [
     { id: 'EMP014', name: 'Pooja Mehta', email: 'pooja.mehta@company.com', password: 'emp@014', department: 'Artificial Intelligence' }
 ];
 
+router.get('/login', (req, res) => {
+    res.json({ method: 'GET', message: 'Use POST to login' });
+});
+
 router.post('/login', async (req, res) => {
     try {
         const { id, password, role } = req.body;
