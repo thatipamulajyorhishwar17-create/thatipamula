@@ -206,7 +206,7 @@ router.post('/change-password', async (req, res) => {
         if (newPassword.length < 4) {
             return res.status(400).json({ success: false, message: 'Password must be at least 4 characters' });
         }
-        const user = findUser(req.user?.id);
+        const user = findUser(req.user && req.user.id);
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
