@@ -64,6 +64,11 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Debug endpoint to test POST
+app.post('/api/ping', (req, res) => {
+    res.json({ pong: true, body: req.body });
+});
+
 // SPA fallback - serve index.html for all non-file, non-api routes
 app.get('*', (req, res) => {
     if (req.path.startsWith('/api')) {
