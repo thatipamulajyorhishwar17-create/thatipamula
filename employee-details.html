@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View detailed employee profile at Project Slovers Private Limited. See attendance records, performance ratings, project assignments, and ID card.">
+    <meta name="keywords" content="employee profile, employee details, performance, attendance, ID card, Project Slovers">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Employee Details - Project Slovers Private Limited">
+    <meta property="og:description" content="Comprehensive employee profile with attendance, performance, and project information.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Employee Details - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Employee profile and details for Project Slovers Private Limited.">
+    <title>Employee Details - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/employee-details.html">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html" class="active"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Employee Details</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search employees...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2 id="detailName">Employee Name</h2>
+                        <div class="breadcrumb"><a href="employees.html">Employees</a> / <span id="detailId">EMP000</span></div>
+                    </div>
+                    <button class="btn btn-outline" onclick="window.location.href='employees.html'">&#8592; Back to Employees</button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="summary-card">
+                        <div class="card-icon blue" id="detailInitials" style="font-weight:700;font-size:18px;">JD</div>
+                        <div class="card-body">
+                            <div class="card-label">Department / Designation</div>
+                            <div class="card-value" style="font-size:16px;"><span id="detailDept">Department</span> - <span id="detailDesignation">Designation</span></div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon green">&#128200;</div>
+                        <div class="card-body">
+                            <div class="card-label">Current Progress</div>
+                            <div class="card-value" id="detProgress">0%</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon purple">&#9733;</div>
+                        <div class="card-body">
+                            <div class="card-label">Performance Rating</div>
+                            <div class="card-value" id="detRating">-</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon orange">&#128197;</div>
+                        <div class="card-body">
+                            <div class="card-label">Attendance</div>
+                            <div class="card-value" id="detAttendance">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>Contact Information</h3>
+                        <div class="detail-row"><span class="label">Email</span><span class="value" id="detEmail">-</span></div>
+                        <div class="detail-row"><span class="label">Phone</span><span class="value" id="detPhone">-</span></div>
+                        <div class="detail-row"><span class="label">Address</span><span class="value" id="detAddress">-</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Work Information</h3>
+                        <div class="detail-row"><span class="label">Department</span><span class="value" id="detDept">-</span></div>
+                        <div class="detail-row"><span class="label">Designation</span><span class="value" id="detDesig">-</span></div>
+                        <div class="detail-row"><span class="label">Reporting Manager</span><span class="value" id="detManager">-</span></div>
+                        <div class="detail-row"><span class="label">Joining Date</span><span class="value" id="detJoining">-</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Project Details</h3>
+                        <div class="detail-row"><span class="label">Current Project</span><span class="value" id="detProject">-</span></div>
+                        <div class="detail-row"><span class="label">Project Status</span><span class="value" id="detProjectStatus">-</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Task Overview</h3>
+                        <div class="detail-row"><span class="label">Completed Tasks</span><span class="value" id="detCompleted">0</span></div>
+                        <div class="detail-row"><span class="label">Pending Tasks</span><span class="value" id="detPending">0</span></div>
+                    </div>
+                </div>
+
+                <div class="charts-grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));">
+                    <div class="chart-card">
+                        <h3>Work Completion</h3>
+                        <div class="progress-bar" style="height:12px;border-radius:6px;margin-bottom:8px;">
+                            <div class="progress-fill green" id="workProgress" style="width:0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="workProgressText">0%</span></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Attendance</h3>
+                        <div class="progress-bar" style="height:12px;border-radius:6px;margin-bottom:8px;">
+                            <div class="progress-fill blue" id="attProgress" style="width:0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="attProgressText">0%</span></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Task Completion</h3>
+                        <div class="progress-bar" style="height:12px;border-radius:6px;margin-bottom:8px;">
+                            <div class="progress-fill orange" id="taskProgress" style="width:0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="taskProgressText">0%</span></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Project Contribution</h3>
+                        <div class="progress-bar" style="height:12px;border-radius:6px;margin-bottom:8px;">
+                            <div class="progress-fill purple" id="contribProgress" style="width:0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="contribProgressText">0%</span></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Overall Performance</h3>
+                        <div class="progress-bar" style="height:12px;border-radius:6px;margin-bottom:8px;">
+                            <div class="progress-fill green" id="perfProgress" style="width:0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="perfProgressText">0%</span></div>
+                    </div>
+                    <div class="chart-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <h3>Overall Progress</h3>
+                        <div class="circular-progress" id="circularProgress">
+                            <svg width="80" height="80">
+                                <circle cx="40" cy="40" r="34" fill="none" stroke="#e9ecef" stroke-width="6"/>
+                                <circle cx="40" cy="40" r="34" fill="none" stroke="#1976d2" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round"/>
+                            </svg>
+                            <span class="progress-value">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>Monthly Reports</h3>
+                        <div id="detailReports">
+                            <div class="detail-row"><span class="label">No reports available</span></div>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Recent Activities</h3>
+                        <div id="detailActivities">
+                            <div class="detail-row"><span class="label">No recent activities</span></div>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Account Settings</h3>
+                        <div class="detail-row">
+                            <span class="label">Password</span>
+                            <span class="value"><button class="btn btn-outline btn-sm" onclick="showChangePasswordModal()">Change Password</button></span>
+                        </div>
+                        <div id="changePwdSection" style="display:none;margin-top:12px;">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" id="curPwd" style="width:100%;padding:8px;border:1px solid var(--grey-300);border-radius:var(--radius-sm);">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" id="newPwd" style="width:100%;padding:8px;border:1px solid var(--grey-300);border-radius:var(--radius-sm);">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" id="conPwd" style="width:100%;padding:8px;border:1px solid var(--grey-300);border-radius:var(--radius-sm);">
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="saveNewPassword()">Update Password</button>
+                            <button class="btn btn-outline btn-sm" onclick="hideChangePassword()" style="margin-left:4px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Employee ID Card</h3>
+                        <button class="btn btn-primary" onclick="printIdCard()">&#128424; Print / Download ID Card</button>
+                    </div>
+                    <div style="padding:24px;display:flex;justify-content:center;">
+                        <div id="idCardContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

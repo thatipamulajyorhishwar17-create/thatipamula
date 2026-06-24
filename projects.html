@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track and manage projects at Project Slovers Private Limited. View project status, progress, team assignments, and deadlines.">
+    <meta name="keywords" content="project management, project tracking, team projects, Project Slovers, project status">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Projects - Project Slovers Private Limited">
+    <meta property="og:description" content="Manage and track all projects, team assignments, and progress at Project Slovers.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Projects - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Project management portal for Project Slovers Private Limited.">
+    <title>Projects - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/projects.html">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html" class="active"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Projects</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search projects...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2>Project Management</h2>
+                        <div class="breadcrumb">Home / Projects</div>
+                    </div>
+                </div>
+
+                <div class="cards-grid" id="projectCards"></div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>All Projects</h3>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>Project ID</th>
+                                    <th>Manager</th>
+                                    <th>Team</th>
+                                    <th>Start Date</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Progress</th>
+                                    <th>Time Left</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

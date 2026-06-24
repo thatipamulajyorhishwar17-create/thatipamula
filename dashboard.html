@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Slovers Private Limited</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html" class="active"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Dashboard</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search employees...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2>Dashboard Overview</h2>
+                        <div class="breadcrumb">Home / Dashboard</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.location.href='employees.html'">Manage Employees</button>
+                </div>
+                <div class="cards-grid">
+                    <div class="summary-card">
+                        <div class="card-icon blue">&#128101;</div>
+                        <div class="card-body">
+                            <div class="card-label">Total Employees</div>
+                            <div class="card-value" id="totalEmployees">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon green">&#10003;</div>
+                        <div class="card-body">
+                            <div class="card-label">Active Employees</div>
+                            <div class="card-value" id="activeEmployees">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon orange">&#128681;</div>
+                        <div class="card-body">
+                            <div class="card-label">On Leave</div>
+                            <div class="card-value" id="onLeave">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon purple">&#128193;</div>
+                        <div class="card-body">
+                            <div class="card-label">Departments</div>
+                            <div class="card-value" id="totalDepartments">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon blue">&#128187;</div>
+                        <div class="card-body">
+                            <div class="card-label">Ongoing Projects</div>
+                            <div class="card-value" id="ongoingProjects">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon green">&#128190;</div>
+                        <div class="card-body">
+                            <div class="card-label">Completed Projects</div>
+                            <div class="card-value" id="completedProjects">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon red">&#128196;</div>
+                        <div class="card-body">
+                            <div class="card-label">Pending Reports</div>
+                            <div class="card-value" id="pendingReports">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon teal">&#128200;</div>
+                        <div class="card-body">
+                            <div class="card-label">Avg Progress</div>
+                            <div class="card-value" id="averageProgress">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Monthly Progress</h3>
+                        <div class="chart-container">
+                            <canvas id="monthlyProgressChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Department Performance</h3>
+                        <div class="chart-container">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Project Completion</h3>
+                        <div class="chart-container">
+                            <canvas id="projectChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Employee Attendance</h3>
+                        <div class="chart-container">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

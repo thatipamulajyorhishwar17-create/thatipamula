@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Employee attendance tracking at Project Slovers Private Limited. View daily attendance, check-in and check-out records, and attendance reports.">
+    <meta name="keywords" content="attendance tracking, employee attendance, check-in, check-out, time tracking, Project Slovers">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Attendance - Project Slovers Private Limited">
+    <meta property="og:description" content="Track employee attendance, check-in/out times, and attendance reports.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Attendance - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Attendance tracking portal for Project Slovers Private Limited.">
+    <title>Attendance - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/attendance.html">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html" class="active"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Attendance</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search attendance...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2>Attendance Dashboard</h2>
+                        <div class="breadcrumb">Home / Attendance</div>
+                    </div>
+                </div>
+
+                <div class="attendance-grid">
+                    <div class="attendance-stat">
+                        <div class="stat-number" style="color:var(--success);" id="statPresent">0</div>
+                        <div class="stat-label">Present</div>
+                    </div>
+                    <div class="attendance-stat">
+                        <div class="stat-number" style="color:var(--danger);" id="statAbsent">0</div>
+                        <div class="stat-label">Absent</div>
+                    </div>
+                    <div class="attendance-stat">
+                        <div class="stat-number" style="color:var(--warning);" id="statLeave">0</div>
+                        <div class="stat-label">On Leave</div>
+                    </div>
+                    <div class="attendance-stat">
+                        <div class="stat-number" style="color:var(--orange);" id="statLate">0</div>
+                        <div class="stat-label">Late</div>
+                    </div>
+                    <div class="attendance-stat">
+                        <div class="stat-number" style="color:var(--secondary);" id="statHours">0h</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Employee Attendance &amp; Progress Overview</h3>
+                        <div class="table-actions">
+                            <select id="attDeptFilter">
+                                <option value="all">All Departments</option>
+                            </select>
+                            <select id="attStatusFilter">
+                                <option value="all">All Status</option>
+                                <option value="Active">Active</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Attendance %</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Work Hours</th>
+                                    <th>Progress</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceEmpBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Today's Attendance</h3>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee Name</th>
+                                    <th>Employee ID</th>
+                                    <th>Date</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Total Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

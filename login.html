@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to Project Slovers Private Limited Employee Management System. Access your employee dashboard, track attendance, manage projects, and view reports.">
+    <meta name="keywords" content="employee login, Project Slovers, employee management, HR portal, attendance tracking, project management">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Login - Project Slovers Private Limited">
+    <meta property="og:description" content="Employee Management System - Login to manage attendance, projects, and performance.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Login - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Employee Management System for Project Slovers Private Limited.">
+    <title>Login - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/login.html">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-left">
+                <div class="login-logo">
+                    <div class="logo-icon">PS</div>
+                    <div class="logo-text">
+                        <h2>Project Slovers Private Limited</h2>
+                        <span>Employee Management System</span>
+                    </div>
+                </div>
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to continue</p>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="empId">Employee ID or Email</label>
+                        <input type="text" id="empId" placeholder="Enter Employee ID or Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Login As</label>
+                        <select id="role">
+                            <option value="admin">Admin</option>
+                            <option value="employee">Employee</option>
+                        </select>
+                    </div>
+                    <div class="form-options">
+                        <label><input type="checkbox" checked> Remember me</label>
+                        <a href="#" onclick="event.preventDefault();forgotPassword()">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                    <div class="demo-msg" id="demoMsg"></div>
+                    <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--grey-500);">
+                        New employee? <a href="#" onclick="event.preventDefault();showPasswordSetup()" style="color:var(--secondary);">Set your password here</a>
+                    </div>
+                </form>
+            </div>
+            <div class="login-right">
+                <div class="feature-list">
+                    <h2>Employee Management Portal</h2>
+                    <div class="feature-item">
+                        <div class="fi-icon">&#128202;</div>
+                        <span>Track employee progress and performance</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon">&#128203;</div>
+                        <span>Manage projects and tasks efficiently</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon">&#128197;</div>
+                        <span>Monitor attendance and working hours</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon">&#128200;</div>
+                        <span>Generate detailed reports and analytics</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon">&#128101;</div>
+                        <span>Manage employee information and ID cards</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    <script src="backend-integration.js"></script>
+</body>
+</html>

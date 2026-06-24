@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate and view employee reports at Project Slovers Private Limited. Download performance, attendance, and project reports.">
+    <meta name="keywords" content="employee reports, performance report, attendance report, HR reports, Project Slovers">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Reports - Project Slovers Private Limited">
+    <meta property="og:description" content="Generate comprehensive employee reports including performance, attendance, and project data.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Reports - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Employee reports portal for Project Slovers Private Limited.">
+    <title>Reports - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/reports.html">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html" class="active"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Reports</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search reports...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2>Employee Reports</h2>
+                        <div class="breadcrumb">Home / Reports</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="document.getElementById('reportFormModal').classList.add('active')">+ Submit Report</button>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>All Reports</h3>
+                        <div class="table-actions">
+                            <select id="reportStatusFilter">
+                                <option value="all">All Status</option>
+                                <option value="Submitted">Submitted</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Report ID</th>
+                                    <th>Employee</th>
+                                    <th>Emp ID</th>
+                                    <th>Project</th>
+                                    <th>Date</th>
+                                    <th>Done</th>
+                                    <th>Pending</th>
+                                    <th>Hours</th>
+                                    <th>Progress</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3>Report Details</h3>
+                <button class="close-btn" onclick="closeModal('reportModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="reportModalBody"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="reportFormModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3>Submit Employee Report</h3>
+                <button class="close-btn" onclick="closeModal('reportFormModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="report-form" id="reportForm" onsubmit="return submitEmployeeReport(event)">
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Employee ID *</label>
+                                <input type="text" name="empId" required placeholder="e.g., EMP001">
+                            </div>
+                            <div class="form-group">
+                                <label>Employee Name *</label>
+                                <input type="text" name="empName" required placeholder="Full name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Project *</label>
+                                <input type="text" name="project" required placeholder="Project name">
+                            </div>
+                            <div class="form-group">
+                                <label>Date *</label>
+                                <input type="date" name="reportDate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3>Work Details</h3>
+                        <div class="form-group">
+                            <label>Work Completed Today *</label>
+                            <textarea name="workDone" required rows="3" placeholder="Describe the work completed today..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Pending Work</label>
+                            <textarea name="pendingWork" rows="2" placeholder="Any pending work..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Problems or Blockers</label>
+                            <textarea name="blockers" rows="2" placeholder="Any issues or blockers..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tasks Completed</label>
+                                <input type="number" name="tasksCompleted" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Tasks Pending</label>
+                                <input type="number" name="tasksPending" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Working Hours *</label>
+                                <input type="number" name="workingHours" required min="0" max="24" step="0.5" placeholder="e.g., 8">
+                            </div>
+                            <div class="form-group">
+                                <label>Progress % *</label>
+                                <input type="number" name="progress" required min="0" max="100" placeholder="0-100">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tomorrow's Plan</label>
+                            <textarea name="tomorrowPlan" rows="2" placeholder="Plan for tomorrow..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3>Attachment</h3>
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <div class="upload-icon">&#128206;</div>
+                            <p>Click to upload supporting documents (optional)</p>
+                            <input type="file" id="fileInput" style="display:none">
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+                        <button type="button" class="btn btn-outline" onclick="closeModal('reportFormModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Analyze employee data and performance metrics at Project Slovers Private Limited. View charts, trends, department analytics, and top performers.">
+    <meta name="keywords" content="employee analysis, performance metrics, HR analytics, department analytics, charts, Project Slovers">
+    <meta name="author" content="Project Slovers Private Limited">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Analysis - Project Slovers Private Limited">
+    <meta property="og:description" content="Data-driven employee analysis with charts, performance metrics, and department insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Slovers Private Limited">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Analysis - Project Slovers Private Limited">
+    <meta name="twitter:description" content="Employee analytics and performance dashboard for Project Slovers Private Limited.">
+    <title>Analysis - Project Slovers Private Limited</title>
+    <link rel="canonical" href="https://projectsolover.com/analysis.html">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">PS</div>
+                <div>
+                    <h2>Project Slovers</h2>
+                    <span>Employee Management</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html"><span class="nav-icon">&#9632;</span> Dashboard</a>
+                <a href="employees.html"><span class="nav-icon">&#128101;</span> Employees</a>
+                <a href="projects.html"><span class="nav-icon">&#128196;</span> Projects</a>
+                <a href="reports.html"><span class="nav-icon">&#128203;</span> Reports</a>
+                <a href="attendance.html"><span class="nav-icon">&#128197;</span> Attendance</a>
+                <a href="analysis.html" class="active"><span class="nav-icon">&#128200;</span> Analysis</a>
+                <div class="nav-label">Associates</div>
+                <a href="employee-details.html"><span class="nav-icon">&#128100;</span> My Profile</a>
+                <a href="#"><span class="nav-icon">&#9881;</span> Settings</a>
+                <a href="#" onclick="logout()"><span class="nav-icon">&#128682;</span> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                    <h3>Analysis</h3>
+                </div>
+                <div class="header-search">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="headerSearch" placeholder="Search employees...">
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="notifBtn"><span>&#128276;</span><span class="dot"></span></button>
+                    <button class="icon-btn" id="msgBtn"><span>&#9993;</span><span class="dot"></span></button>
+                    <button class="dark-toggle" id="darkModeToggle">&#9790;</button>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="name">Admin</div>
+                            <div class="role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h2>Data Analysis &amp; Insights</h2>
+                        <div class="breadcrumb">Home / Analysis</div>
+                    </div>
+                    <button class="btn btn-outline" onclick="exportAnalysisData()">&#128229; Export Data</button>
+                </div>
+
+                <div class="cards-grid" id="analysisSummaryCards">
+                    <div class="summary-card">
+                        <div class="card-icon blue">&#128101;</div>
+                        <div class="card-body">
+                            <div class="card-label">Avg Performance</div>
+                            <div class="card-value" id="anlAvgPerformance">0.0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon green">&#128200;</div>
+                        <div class="card-body">
+                            <div class="card-label">Avg Progress</div>
+                            <div class="card-value" id="anlAvgProgress">0%</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon purple">&#128197;</div>
+                        <div class="card-body">
+                            <div class="card-label">Avg Attendance</div>
+                            <div class="card-value" id="anlAvgAttendance">0%</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon orange">&#128196;</div>
+                        <div class="card-body">
+                            <div class="card-label">Total Reports</div>
+                            <div class="card-value" id="anlTotalReports">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon red">&#9888;</div>
+                        <div class="card-body">
+                            <div class="card-label">Needs Improvement</div>
+                            <div class="card-value" id="anlNeedsImprovement">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon teal">&#9733;</div>
+                        <div class="card-body">
+                            <div class="card-label">Top Performers</div>
+                            <div class="card-value" id="anlTopPerformers">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Department Performance Comparison</h3>
+                        <div class="chart-container">
+                            <canvas id="deptPerfChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Employee Count by Department</h3>
+                        <div class="chart-container">
+                            <canvas id="deptCountChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Performance Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="perfDistChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Progress Brackets</h3>
+                        <div class="chart-container">
+                            <canvas id="progressBracketChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Attendance Summary</h3>
+                        <div class="chart-container">
+                            <canvas id="attendanceSummaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Report Status Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="reportStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>Top 5 Performers</h3>
+                        <div id="topPerformersList"></div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Department Overview</h3>
+                        <div id="deptOverviewList"></div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Employee Performance Table</h3>
+                        <div class="table-actions">
+                            <select id="analysisDeptFilter">
+                                <option value="all">All Departments</option>
+                            </select>
+                            <select id="analysisSortBy">
+                                <option value="performance">Sort by Performance</option>
+                                <option value="progress">Sort by Progress</option>
+                                <option value="attendance">Sort by Attendance</option>
+                                <option value="name">Sort by Name</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Performance</th>
+                                    <th>Progress</th>
+                                    <th>Attendance</th>
+                                    <th>Status</th>
+                                    <th>Overall Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analysisTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notificationContainer"></div>
+    <script src="api.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
