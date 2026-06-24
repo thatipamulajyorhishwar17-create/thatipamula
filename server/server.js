@@ -6,15 +6,6 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ====== DIAGNOSTIC REQUEST LOG (BEFORE body parsing) ======
-const requestLog = [];
-app.use((req, res, next) => {
-    const entry = { method: req.method, path: req.path, time: Date.now(), headers: req.headers };
-    requestLog.push(entry);
-    if (requestLog.length > 100) requestLog.shift();
-    next();
-});
-
 // ====== MIDDLEWARE ======
 app.use(cors({
     origin: '*',
@@ -46,11 +37,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
-
-// Diagnostic: view request log
-app.get('/api/diag/log', (req, res) => {
-    res.json(requestLog.slice(-50));
-});
 
 // Health check
 app.all('/api/health', (req, res) => {
