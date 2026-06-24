@@ -28,58 +28,16 @@ const EMPLOYEES = [
     { id: 'EMP014', name: 'Pooja Mehta', email: 'pooja.mehta@company.com', password: 'emp@014', department: 'Artificial Intelligence' }
 ];
 
-// POST /api/auth/login
+// POST /api/auth/login - MINIMAL VERSION for debugging
 router.post('/login', async (req, res) => {
     try {
-        const { id, password, role } = req.body;
-
-        console.log('Login attempt:', { id: id ? id.substring(0, 20) : '(empty)', role, bodyKeys: Object.keys(req.body) });
-
-        if (!id || !password || !role) {
-            return res.status(400).json({ message: 'Please provide ID, password, and role' });
-        }
-
-        if (role === 'admin') {
-            const user = findUser(id);
-            if (!user) {
-                console.log('Login: admin not found for', id);
-                return res.status(401).json({ message: 'Invalid admin credentials' });
-            }
-
-            const validPassword = await bcrypt.compare(password, user.password);
-            if (!validPassword) {
-                console.log('Login: wrong password for', id);
-                return res.status(401).json({ message: 'Invalid admin credentials' });
-            }
-
-            const token = generateToken({ id: user.id, name: user.name, role: 'admin' });
-            console.log('Login: success for', id);
-            return res.json({
-                message: 'Login successful! Welcome Admin',
-                token,
-                user: { id: user.id, name: user.name, role: 'admin' }
-            });
-        } else if (role === 'employee') {
-            const emp = EMPLOYEES.find(e => e.id === id || e.email === id);
-            if (!emp) {
-                return res.status(401).json({ message: 'Employee not found! Please check your ID or email' });
-            }
-            if (password !== emp.password) {
-                return res.status(401).json({ message: 'Invalid password for ' + emp.id + '. Use your employee password' });
-            }
-
-            const token = generateToken({ id: emp.id, name: emp.name, role: 'employee', department: emp.department });
-            return res.json({
-                message: 'Login successful! Welcome ' + emp.name,
-                token,
-                user: { id: emp.id, name: emp.name, role: 'employee', department: emp.department }
-            });
-        } else {
-            return res.status(400).json({ message: 'Invalid role specified' });
-        }
+        console.log('Login handler ENTERED');
+        const response = res.json({ message: 'OK', body: req.body });
+        console.log('Login handler FINISHED');
+        return response;
     } catch (err) {
         console.error('Login error:', err);
-        return res.status(500).json({ message: 'Server error during login' });
+        return res.status(500).json({ message: 'Server error' });
     }
 });
 
