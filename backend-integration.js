@@ -887,30 +887,27 @@ const originalInitPageSpecific = window.initPageSpecific;
 window.initPageSpecific = function() {
     const page = window.location.pathname.split('/').pop() || 'index.html';
 
+    // Handle login page
+    if (page === 'login.html' || page === '') {
+        if (typeof window.initLogin === 'function') {
+            window.initLogin();
+        }
+        return;
+    }
+
     // Override the async inits after loadSavedData completes
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(async () => {
-            if (page === 'dashboard.html' && typeof window.initDashboard === 'function') {
-                // Called by original flow, but our override is async
-            }
-            if (page === 'analysis.html' && typeof window.initAnalysis === 'function') {
-                // Our override handles it
-            }
-            if (page === 'employees.html' && typeof loadEmployeeTable === 'function') {
-                loadEmployeeTable();
-                if (typeof setupEmployeeFilters === 'function') setupEmployeeFilters();
-                if (typeof setupEmployeeModals === 'function') setupEmployeeModals();
-                if (typeof setupAddEmployee === 'function') setupAddEmployee();
-            }
-        }, 500);
-    });
+    setTimeout(async () => {
+        if (page === 'dashboard.html' && typeof window.initDashboard === 'function') {
+            // Our override is async, called from loadSavedData
+        }
+        if (page === 'analysis.html' && typeof window.initAnalysis === 'function') {
+            // Our override handles it
+        }
+        if (page === 'employees.html' && typeof loadEmployeeTable === 'function') {
+            loadEmployeeTable();
+            if (typeof setupEmployeeFilters === 'function') setupEmployeeFilters();
+            if (typeof setupEmployeeModals === 'function') setupEmployeeModals();
+            if (typeof setupAddEmployee === 'function') setupAddEmployee();
+        }
+    }, 500);
 };
-
-// ====== FIX: initPageSpecific to handle async ======
-
-// Override the DOMContentLoaded flow
-const originalDOMReady = document.addEventListener;
-document.addEventListener('DOMContentLoaded', function() {}, { once: true });
-
-// Patch loadSavedData call to be async
-const originalDOMContentLoaded = document.addEventListener;
