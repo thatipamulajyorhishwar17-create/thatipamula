@@ -54,7 +54,13 @@ async function apiRequest(endpoint, options = {}) {
 
     try {
         const response = await fetch(API_BASE_URL + endpoint, config);
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonErr) {
+            const text = await response.text().catch(() => '');
+            throw new Error('Server returned empty response for ' + endpoint + '. Please check the backend logs.');
+        }
 
         if (!response.ok) {
             if (response.status === 401) {
