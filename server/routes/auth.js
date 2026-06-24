@@ -26,6 +26,28 @@ const EMPLOYEES = [
     { id: 'EMP014', name: 'Pooja Mehta', email: 'pooja.mehta@company.com', password: 'emp@014', department: 'Artificial Intelligence' }
 ];
 
+// Diagnostic: test each auth component individually
+router.post('/diag', async (req, res) => {
+    const result = { bcrypt: null, jwt: null, findUser: null, node: process.version };
+    try {
+        const testHash = await bcrypt.hash('test', 10);
+        const testCompare = await bcrypt.compare('test', testHash);
+        result.bcrypt = { hash: testHash.substring(0, 20) + '...', compare: testCompare };
+    } catch (e) { result.bcrypt = { error: e.message }; }
+
+    try {
+        const token = generateToken({ test: true });
+        result.jwt = { token: token.substring(0, 30) + '...' };
+    } catch (e) { result.jwt = { error: e.message }; }
+
+    try {
+        const user = findUser('admin');
+        result.findUser = { found: !!user, name: user ? user.name : null };
+    } catch (e) { result.findUser = { error: e.message }; }
+
+    res.json({ success: true, diag: result });
+});
+
 router.get('/login', (req, res) => {
     res.json({ success: false, method: 'GET', message: 'Use POST to login' });
 });

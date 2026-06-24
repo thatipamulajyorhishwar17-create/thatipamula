@@ -18,6 +18,11 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // ====== API ROUTES (MUST be before static files) ======
 const authRoutes = require('./routes/auth');
 
+// Diagnostic: minimal POST handler (no deps, no async) to test Render POST handling
+app.post('/api/debug/ping', (req, res) => {
+    res.json({ ok: true, received: req.body || {} });
+});
+
 const employeeRoutes = require('./routes/employees');
 const attendanceRoutes = require('./routes/attendance');
 const projectRoutes = require('./routes/projects');
