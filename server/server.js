@@ -9,6 +9,28 @@ if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
 }
 
+// Auto-seed admin users if users.json doesn't exist
+const USERS_FILE = path.join(dataDir, 'users.json');
+async function autoSeed() {
+    if (!fs.existsSync(USERS_FILE)) {
+        try {
+            const bcrypt = require('bcryptjs');
+            const adminUsers = [
+                { id: 'admin', name: 'Admin', email: 'admin@company.com', password: 'admin123', role: 'admin', created_at: new Date().toISOString() },
+                { id: 'thatipamulajyothishwargoud@gmail.com', name: 'Jyothishwar Goud Thatipamula', email: 'thatipamulajyothishwargoud@gmail.com', password: 'Bhanu@9002', role: 'admin', created_at: new Date().toISOString() }
+            ];
+            const seededUsers = [];
+            for (const user of adminUsers) {
+                seededUsers.push({ ...user, password: await bcrypt.hash(user.password, 10) });
+            }
+            fs.writeFileSync(USERS_FILE, JSON.stringify(seededUsers, null, 2));
+            console.log(`  Auto-seeded ${seededUsers.length} admin user(s)`);
+        } catch (e) {
+            console.error('  Auto-seed failed:', e.message);
+        }
+    }
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -56,15 +78,19 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-    console.log(`\n  Project Slovers Backend Server`);
-    console.log(`  ================================`);
-    console.log(`  URL:        http://localhost:${PORT}`);
-    console.log(`  API:        http://localhost:${PORT}/api`);
-    console.log(`  Frontend:   http://localhost:${PORT}/login.html`);
-    console.log(`  \n  Admin Logins:`);
-    console.log(`    - admin / admin123 (legacy)`);
-    console.log(`    - thatipamulajyothishwargoud@gmail.com / Bhanu@9002 (new)`);
-    console.log(`  \n  Run seed first: node seed.js`);
-    console.log(`  ================================\n`);
+autoSeed().then(() => {
+    app.listen(PORT, () => {
+        console.log(`\n  Project Slovers Backend Server`);
+        console.log(`  ================================`);
+        console.log(`  URL:        http://localhost:${PORT}`);
+        console.log(`  API:        http://localhost:${PORT}/api`);
+        console.log(`  Frontend:   http://localhost:${PORT}/login.html`);
+        console.log(`  \n  Admin Logins:`);
+        console.log(`    - admin / admin123 (legacy)`);
+        console.log(`    - thatipamulajyothishwargoud@gmail.com / Bhanu@9002 (new)`);
+        console.log(`  ================================\n`);
+    });
+}).catch(err => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
 });
