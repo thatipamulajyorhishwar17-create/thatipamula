@@ -39,12 +39,6 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Request logger
-app.use((req, res, next) => {
-    console.log(req.method, req.path, req.method === 'POST' ? JSON.stringify(req.body).substring(0, 100) : '');
-    next();
-});
-
 // Serve static files from the parent directory (frontend)
 app.use(express.static(path.join(__dirname, '..')));
 
@@ -84,19 +78,21 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal server error' });
 });
 
+app.listen(PORT, () => {
+    console.log(`\n  Project Slovers Backend Server`);
+    console.log(`  ================================`);
+    console.log(`  URL:        http://0.0.0.0:${PORT}`);
+    console.log(`  API:        http://0.0.0.0:${PORT}/api`);
+    console.log(`  Frontend:   http://0.0.0.0:${PORT}/login.html`);
+    console.log(`  \n  Admin Logins:`);
+    console.log(`    - admin / admin123 (legacy)`);
+    console.log(`    - thatipamulajyothishwargoud@gmail.com / Bhanu@9002 (new)`);
+    console.log(`  ================================\n`);
+});
+
+// Auto-seed in background (doesn't block server startup)
 autoSeed().then(() => {
-    app.listen(PORT, () => {
-        console.log(`\n  Project Slovers Backend Server`);
-        console.log(`  ================================`);
-        console.log(`  URL:        http://localhost:${PORT}`);
-        console.log(`  API:        http://localhost:${PORT}/api`);
-        console.log(`  Frontend:   http://localhost:${PORT}/login.html`);
-        console.log(`  \n  Admin Logins:`);
-        console.log(`    - admin / admin123 (legacy)`);
-        console.log(`    - thatipamulajyothishwargoud@gmail.com / Bhanu@9002 (new)`);
-        console.log(`  ================================\n`);
-    });
+    console.log('Auto-seed check complete');
 }).catch(err => {
-    console.error('Failed to start server:', err);
-    process.exit(1);
+    console.error('Auto-seed failed:', err);
 });
